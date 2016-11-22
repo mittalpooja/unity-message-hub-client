@@ -55,6 +55,13 @@ public class ReaderThread implements Runnable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}  finally {
+			try {
+				if (this.in!=null) this.in.close();
+				if (this.sock!=null) sock.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

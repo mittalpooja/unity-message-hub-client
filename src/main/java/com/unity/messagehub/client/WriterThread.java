@@ -36,35 +36,45 @@ public class WriterThread implements Runnable {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		String s=null;
 		
-		while (true) {
-			try {
-				s = bufferedReader.readLine();
-				byte msg_type = MessageHubProtocol.convertToByte(s);
-				
-				//System.out.println(s+":"+msg_type);
-				
-				switch(msg_type) {
-					case MessageHubProtocol.GET_ID_REQUEST:
-						out.writeByte(msg_type);
-						out.flush();
-						break;
-					case MessageHubProtocol.GET_LIST_REQUEST:
-						out.writeByte(msg_type);
-						out.flush();
-						break;
-					case MessageHubProtocol.RELAY_REQUEST:
-						s = bufferedReader.readLine();
-						RelayRequestMessage msgToRelay = RelayRequestMessage.parseRelayMessage(s);
-						if (msgToRelay!=null) {
+		try {
+			while (true) {
+				try {
+					s = bufferedReader.readLine();
+					byte msg_type = MessageHubProtocol.convertToByte(s);
+					
+					//System.out.println(s+":"+msg_type);
+					
+					switch(msg_type) {
+						case MessageHubProtocol.GET_ID_REQUEST:
 							out.writeByte(msg_type);
-							msgToRelay.send(out);
-						} else {
-							System.out.println("Unreadable Relay Message");
-						}
-						break;
-					default:
-						System.out.println("Incorrect Message Type");
+							out.flush();
+							break;
+						case MessageHubProtocol.GET_LIST_REQUEST:
+							out.writeByte(msg_type);
+							out.flush();
+							break;
+						case MessageHubProtocol.RELAY_REQUEST:
+							s = bufferedReader.readLine();
+							RelayRequestMessage msgToRelay = RelayRequestMessage.parseRelayMessage(s);
+							if (msgToRelay!=null) {
+								out.writeByte(msg_type);
+								msgToRelay.send(out);
+							} else {
+								System.out.println("Unreadable Relay Message");
+							}
+							break;
+						default:
+							System.out.println("Incorrect Message Type");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+			}
+		} finally {
+			try {
+				if (this.out!=null) this.out.close();
+				if (bufferedReader!=null) bufferedReader.close();
+				if (this.sock!=null) sock.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

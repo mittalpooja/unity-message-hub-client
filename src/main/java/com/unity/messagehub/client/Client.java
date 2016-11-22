@@ -5,11 +5,15 @@ import java.net.Socket;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/*
+ * Main class for the message hub client
+ */
 public class Client 
 {
+	private static int NTHREADS = 2;
 	public final static int SERVER_PORT = 8082;
 	public final static String SERVER_HOST = "localhost";
-	public final static Executor exec = Executors.newFixedThreadPool(5);
+	public final static Executor exec = Executors.newFixedThreadPool(NTHREADS);
 	
 	private Socket sock;
 
@@ -17,14 +21,10 @@ public class Client
 
 		sock = new Socket(SERVER_HOST, SERVER_PORT);
 		
-		try {
-			ReaderThread reader = new ReaderThread(sock);
-			WriterThread writer = new WriterThread(sock);
-			exec.execute(reader);
-			exec.execute(writer);
-		} finally {
-			//sock.close();
-		}
+		ReaderThread reader = new ReaderThread(sock);
+		WriterThread writer = new WriterThread(sock);
+		exec.execute(reader);
+		exec.execute(writer);
 	}
 	
 	
