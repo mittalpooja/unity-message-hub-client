@@ -9,7 +9,7 @@
  {"receivers":"2,3,4,7","message":"hello again"}
     This client takes the input in text/json form and converts it to more conpact form as described in the [MessageHubProtocol.java](https://github.com/mittalpooja/unity-message-hub-library/blob/master/src/main/java/com/unity/messagehub/library/MessageHubProtocol.java)
     
-* Note: For testing simplicity, I am reading the input from System.in. Each line (ending with newline character) is interpreted by the client. This implies the relay message json payload cannot have newline character embedded in it. The message hub relay message supports all characters in the payload. Client can be eaily changed to take input from other sources like a File.
+* NOTE: For testing simplicity, I am reading the input from System.in. Each line (ending with newline character) is interpreted by the client. This implies the relay message json payload cannot have newline character embedded in it. The message hub relay message supports all characters in the payload. Client can be eaily changed to take input from other sources like a File.
     
 
 <example run>
